@@ -1,23 +1,25 @@
 import React from "react";
-import {View, StyleSheet, Text} from 'react-native'
+import {View, StyleSheet, Text, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard} from 'react-native'
 import { Formik } from "formik";
-import { Input, Button } from 'native-base';
-import { padding } from "styled-system";
+import { Input, Button, Image } from 'native-base';
 
-export default function Login(){
+export default function Login({navigation}){
     return(
-        <View style={styles.container}>
+        
+        <KeyboardAvoidingView style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
             <View style={styles.bannerContainer}>
-
             </View>
             <Formik
                 initialValues={{email: '', password: ''}}
                 onSubmit={(values) => {
-
+                    navigation.navigate('HomeStack')
                 }}  
             >
                 {(props) => (
                     <View style={styles.formContainer}>
+                    
                     <Text style={[styles.title, styles.formElements]}>Login</Text>
                     <Input
                       placeholder="Email"
@@ -36,7 +38,7 @@ export default function Login(){
                     </View>
                 )}
             </Formik>
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -54,7 +56,6 @@ const styles = StyleSheet.create({
 
     formContainer:{
         flex: 6,
-        backgroundColor: 'red',
         padding: 20,
         justifyContent: 'center',
     },

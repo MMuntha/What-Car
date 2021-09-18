@@ -3,11 +3,15 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { NativeBaseProvider } from 'native-base';
 import Login from './Screens/Login';
+import { NavigationContainer } from '@react-navigation/native';
+import RootStack from './Routes/RootStack';
 
 export default function App() {
   return (
     <NativeBaseProvider>
-      <Login/>
+        <NavigationContainer>
+          <RootStack/>
+        </NavigationContainer>
     </NativeBaseProvider>
   );
 }
