@@ -1,7 +1,7 @@
 import React from "react";
 import {View, StyleSheet, Text, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard} from 'react-native'
 import { Formik } from "formik";
-import { Input, Button, Image } from 'native-base';
+import { Input, Button, Image, Link } from 'native-base';
 
 export default function Login({navigation}){
     return(
@@ -14,7 +14,32 @@ export default function Login({navigation}){
             <Formik
                 initialValues={{email: '', password: ''}}
                 onSubmit={(values) => {
-                    navigation.navigate('HomeStack')
+                    
+                    fetch('http://192.168.1.15:4000/userAuth/userLogin', {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: values.email,
+                            password: values.password
+                        })
+                    })
+                    .then((response) => response.json())
+                    .then((json) => {
+                        if(json.user){
+                            console.log(json.user)
+                            navigation.navigate('HomeStack')
+                        }
+                        if(json.errors){
+                            console.log(json.errors)
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+
                 }}  
             >
                 {(props) => (
@@ -34,7 +59,9 @@ export default function Login({navigation}){
                       value={props.values.password}
                       />
                     
-                      <Button onPress={props.handleSubmit}>Login</Button>
+                      <Button style={styles.formElements} onPress={props.handleSubmit}>Login</Button>
+                      <Button onPress={() => {navigation.push('SignUp')}}>Signup</Button>
+
                     </View>
                 )}
             </Formik>
