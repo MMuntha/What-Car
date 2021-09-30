@@ -1,9 +1,11 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native'
 
-export default function Home(){
+export default function Home({route ,navigation}){
+
+    
 
     return(
-        <Text>This is Home</Text>
+        <Text>Welcome </Text>
     )
 }

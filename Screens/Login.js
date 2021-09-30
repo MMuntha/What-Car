@@ -2,6 +2,7 @@ import React from "react";
 import {View, StyleSheet, Text, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard} from 'react-native'
 import { Formik } from "formik";
 import { Input, Button, Image, Link } from 'native-base';
+import { TabActions } from "@react-navigation/routers";
 
 export default function Login({navigation}){
     return(
@@ -15,30 +16,34 @@ export default function Login({navigation}){
                 initialValues={{email: '', password: ''}}
                 onSubmit={(values) => {
                     
-                    fetch('http://192.168.1.15:4000/userAuth/userLogin', {
-                        method: 'POST',
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            email: values.email,
-                            password: values.password
-                        })
-                    })
-                    .then((response) => response.json())
-                    .then((json) => {
-                        if(json.user){
-                            console.log(json.user)
-                            navigation.navigate('HomeStack')
-                        }
-                        if(json.errors){
-                            console.log(json.errors)
-                        }
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                    })
+                    // fetch('http://192.168.1.15:4000/userAuth/userLogin', {
+                    //     method: 'POST',
+                    //     headers: {
+                    //         Accept: 'application/json',
+                    //         'Content-Type': 'application/json'
+                    //     },
+                    //     body: JSON.stringify({
+                    //         email: values.email,
+                    //         password: values.password
+                    //     })
+                    // })
+                    // .then((response) => response.json())
+                    // .then((json) => {
+                    //     if(json.user){
+                    //         console.log(json.user)
+                    //         navigation.navigate('HomeStack',{screen: 'Tab', params:{screen: 'Home', params:{username: json.user.user_username}}})
+                    //     }
+                    //     if(json.errors){
+                    //         console.log(json.errors)
+                    //     }
+
+
+                    // })
+                    // .catch((error) => {
+                    //     console.log(error)
+                    // })
+
+                    navigation.navigate('HomeStack')
 
                 }}  
             >

@@ -17,7 +17,7 @@ export default function BottomTab(){
 
     return(
         <Tab.Navigator
-          screenOptions={{ showIcon: true, tabBarShowLabel: true }}
+          screenOptions={{ showIcon: true, tabBarShowLabel: false }}
         >
         <Tab.Screen
             name="Home"
