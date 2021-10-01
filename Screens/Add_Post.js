@@ -94,7 +94,7 @@ const createFormData = (photo) => {
              <Button style={styles.uploadImageBtn} onPress={pickImage}> Upload Image </Button>
            </View>
            <View style={styles.infoContainer}>
-            {loading ? ( <Spinner size="lg" color="#FF3535"/> ) : (<Text>{result}</Text>) }
+            {loading ? ( <Spinner size="lg" color="#FF3535"/>  ) : (<Text>{result}</Text>) }
              
            </View>
        </View>
