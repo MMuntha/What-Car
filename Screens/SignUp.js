@@ -1,16 +1,37 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
 import {View, StyleSheet, Text, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, ScrollView} from 'react-native'
 import { Formik } from "formik";
-import { Input, Button, Image, Link, FormControl} from 'native-base';
+import { Input, Button, Image, Link, FormControl, NativeBaseProvider} from 'native-base';
 import { marginTop } from "styled-system";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CredintialsContext } from "../Components/CredintialContext";
 
 export default function SignUp({navigation}){
     const [error_username, set_error_usernamme] = useState('')
     const [error_email, set_error_email] = useState('')
     const [erro_password, set_error_password] = useState('')
     const [error_phone_no, set_error_phone_no] = useState('')
+
+
+    const {storedCredintials,setStoredCredintials} = useContext(CredintialsContext)
+
+    const persistLogin = async(credintials) => {
+        try{
+            const jsonValue = JSON.stringify(credintials)
+             await AsyncStorage.setItem('car-login', jsonValue)
+            setStoredCredintials(credintials)
+
+        }
+        catch(e)
+        {
+            console.log(e)
+        }
+
+    }
+
+
     return(
-        
+        <NativeBaseProvider>
         <KeyboardAvoidingView style={styles.container}
         behavior={Platform.OS === "ios" ? "padding"  : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
@@ -22,7 +43,7 @@ export default function SignUp({navigation}){
                 initialValues={{user_username: '', user_email: '', user_password: '', user_phone_no: ''}}
                 onSubmit={(values) => {
 
-                      fetch('http://192.168.1.15:4000/userAuth/userSignUp', {
+                      fetch('http://192.168.1.15:3000/userAuth/userSignUp', {
                       method: 'POST',
                       headers: {
                         Accept: 'application/json',
@@ -39,6 +60,7 @@ export default function SignUp({navigation}){
                       .then((json) => {
                         if(json.customer){
                             console.log(json.customer)
+                            persistLogin(json.customer)
                         }
                         if(json.errors)
                         {
@@ -88,6 +110,7 @@ export default function SignUp({navigation}){
                 )}
             </Formik>
         </KeyboardAvoidingView>
+        </NativeBaseProvider>
     )
 }
 

@@ -11,4 +11,4 @@ export default function HomeStack() {
             <Hstack.Screen name="Tab" component={BottomTab} options={{headerShown: false}}/>
         </Hstack.Navigator>
     )
-}
+}   

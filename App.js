@@ -42,10 +42,8 @@ export default function App() {
   return (
   
   <CredintialsContext.Provider value={{storedCredintials, setStoredCredintials}}>
-    <NativeBaseProvider>
           <RootStack/>
         
-    </NativeBaseProvider>
   </CredintialsContext.Provider>
   );
 }

@@ -1,14 +1,14 @@
 import React, {useContext} from "react";
 import {View, StyleSheet, Text, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard} from 'react-native'
 import { Formik } from "formik";
-import { Input, Button, Image, Link } from 'native-base';
+import { Input, Button, Image, Link, NativeBaseProvider } from 'native-base';
 import { TabActions } from "@react-navigation/routers";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CredintialsContext } from '../Components/CredintialContext';
 
 export default function Login({navigation})
 { 
-    const {storedCredintials, setStoredCredintials} = useContext(CredintialsContext)
+    const {storedCredintials,setStoredCredintials} = useContext(CredintialsContext)
 
     const persistLogin = async(credintials) => {
         try{
@@ -25,7 +25,7 @@ export default function Login({navigation})
     }
 
     return(
-        
+        <NativeBaseProvider>
         <KeyboardAvoidingView style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
@@ -35,7 +35,7 @@ export default function Login({navigation})
                 initialValues={{email: '', password: ''}}
                 onSubmit={(values) => {
                     
-                    fetch('http://192.168.1.15:4000/userAuth/userLogin', {
+                    fetch('http://192.168.1.15:3000/userAuth/userLogin', {
                         method: 'POST',
                         headers: {
                             Accept: 'application/json',
@@ -91,6 +91,7 @@ export default function Login({navigation})
                 )}
             </Formik>
         </KeyboardAvoidingView>
+        </NativeBaseProvider>
     )
 }
 
