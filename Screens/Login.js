@@ -1,11 +1,13 @@
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
 import {View, StyleSheet, Text, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard} from 'react-native'
 import { Formik } from "formik";
 import { Input, Button, Image, Link, NativeBaseProvider } from 'native-base';
 import { TabActions } from "@react-navigation/routers";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CredintialsContext } from '../Components/CredintialContext';
-
+import MainButton from "../Components/Main_Button";
+import Secondary_Button from '../Components/Secondary_Button'
+import SignUp from "./SignUp";
 export default function Login({navigation})
 { 
     const {storedCredintials,setStoredCredintials} = useContext(CredintialsContext)
@@ -83,10 +85,8 @@ export default function Login({navigation})
                      onChangeText={props.handleChange('password')}
                       value={props.values.password}
                       />
-                    
-                      <Button style={styles.formElements} onPress={props.handleSubmit}>Login</Button>
-                      <Button onPress={() => {navigation.push('SignUp')}}>Signup</Button>
-
+                      <MainButton onPress={props.handleSubmit} style={styles.formElements} text="LOGIN"/>
+                     <Secondary_Button text="SIGN UP" onPress={() => {navigation.push('SignUp')}}/>
                     </View>
                 )}
             </Formik>
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     bannerContainer:{
         flex: 2,
         padding:30,
-        backgroundColor: 'blue',
+        backgroundColor: '#FF3535',
     },
 
     formContainer:{
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     },
     
     formElements:{
-        marginBottom: 20
+        marginBottom: 20,
     },
 
     title:{
@@ -122,5 +122,12 @@ const styles = StyleSheet.create({
         fontFamily: 'Helvetica-Bold',
         textAlign: 'center'
         
+    },
+
+    errorMessage:
+    {
+        color: 'red'
     }
+    
+   
 })      

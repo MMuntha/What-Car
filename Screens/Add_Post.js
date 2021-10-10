@@ -4,7 +4,9 @@ import * as ImagePicker from 'expo-image-picker';
 import {Button, Spinner, Input, NativeBaseProvider} from 'native-base';
 import { Formik } from 'formik';
 import { CredintialsContext } from '../Components/CredintialContext';
-``
+import MainButton from '../Components/Main_Button';
+import Secondary_Button from '../Components/Secondary_Button';
+
 
 
 
@@ -36,8 +38,7 @@ const createFormData = (photo) => {
     const [isFocused, setIsFocused] = useState(false);
 
 
-    
-
+  
 
       const handleUploadPhoto = (photo) => {
         fetch(`${SERVER_URL}`, {
@@ -98,7 +99,8 @@ const createFormData = (photo) => {
             <View style={styles.image}>
             <Image source={{ uri: uri }} style={styles.image} />
             </View>
-             <Button style={styles.uploadImageBtn} onPress={pickImage}> Upload Image </Button>
+            <Button style={styles.uploadImageBtn} onPress={pickImage}> Upload Image </Button>
+
            </View>
            <View style={styles.infoContainer}>
              <Input
@@ -120,7 +122,7 @@ const createFormData = (photo) => {
 
 
 
-             <Button onPress={details}>Submit</Button>
+            <MainButton text="Upload" />
            </View>
           
           

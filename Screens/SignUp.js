@@ -5,6 +5,7 @@ import { Input, Button, Image, Link, FormControl, NativeBaseProvider} from 'nati
 import { marginTop } from "styled-system";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CredintialsContext } from "../Components/CredintialContext";
+import MainButton from "../Components/Main_Button";
 
 export default function SignUp({navigation}){
     const [error_username, set_error_usernamme] = useState('')
@@ -105,7 +106,10 @@ export default function SignUp({navigation}){
                       value={props.values.user_phone_no}
                       />
                     
-                      <Button style={styles.formElements} onPress={props.handleSubmit}>Sign up</Button>
+                      {/* <Button style={styles.formElements} onPress={props.handleSubmit}>Sign up</Button> */}
+                      <MainButton text="SIGN UP" style={styles.formElements} onPress={props.handleSubmit}/>
+
+
                     </View>
                 )}
             </Formik>
@@ -123,7 +127,7 @@ const styles = StyleSheet.create({
     bannerContainer:{
         flex: 2,
         padding:30,
-        backgroundColor: 'blue',
+        backgroundColor: '#FF3535',
     },
 
     formContainer:{
