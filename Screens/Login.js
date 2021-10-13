@@ -1,5 +1,5 @@
 import React, {useContext, useState} from "react";
-import {View, StyleSheet, Text, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard} from 'react-native'
+import {View, StyleSheet, Text, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, ActivityIndicator} from 'react-native'
 import { Formik } from "formik";
 import { Input, Button, Image, Link, NativeBaseProvider } from 'native-base';
 import { TabActions } from "@react-navigation/routers";
@@ -8,6 +8,8 @@ import { CredintialsContext } from '../Components/CredintialContext';
 import MainButton from "../Components/Main_Button";
 import Secondary_Button from '../Components/Secondary_Button'
 import SignUp from "./SignUp";
+import { style } from "styled-system";
+
 export default function Login({navigation})
 { 
     const {storedCredintials,setStoredCredintials} = useContext(CredintialsContext)
@@ -26,6 +28,10 @@ export default function Login({navigation})
 
     }
 
+    
+    const [name, setName] = useState('');
+
+    
     return(
         <NativeBaseProvider>
         <KeyboardAvoidingView style={styles.container}
@@ -34,8 +40,8 @@ export default function Login({navigation})
             <View style={styles.bannerContainer}>
             </View>
             <Formik
-                initialValues={{email: '', password: ''}}
-                onSubmit={(values) => {
+                initialValues={{ eamil: '', password: ''}}
+                onSubmit={(values, actions) => {
                     
                     fetch('http://192.168.1.15:3000/userAuth/userLogin', {
                         method: 'POST',
@@ -57,15 +63,19 @@ export default function Login({navigation})
                         }
                         if(json.errors){
                             console.log(json.errors)
-                        }
+                            actions.setFieldError('general', 'Invalid Email or Password')
+                            
 
+                        }
+                        actions.setSubmitting(false)
 
                     })
                     .catch((error) => {
                         console.log(error)
                     })
+                    console.log(values.email)
+                    console.log(values.password)
 
-                   
 
                 }}  
             >
@@ -78,14 +88,21 @@ export default function Login({navigation})
                       style={styles.formElements}
                       onChangeText={props.handleChange('email')}
                       value={props.values.email}
-                      />
+                     
+                     />
                     <Input
                       placeholder="Password"
                       style={styles.formElements}
-                     onChangeText={props.handleChange('password')}
+                      onChangeText={props.handleChange('password')}
                       value={props.values.password}
                       />
+                    <Text style={[styles.formElements, {color: 'red'}]}>{props.errors.general}</Text> 
+                      {props.isSubmitting?  <ActivityIndicator style={style.formElements}/> : 
+                      
                       <MainButton onPress={props.handleSubmit} style={styles.formElements} text="LOGIN"/>
+
+                      }
+                      
                      <Secondary_Button text="SIGN UP" onPress={() => {navigation.push('SignUp')}}/>
                     </View>
                 )}

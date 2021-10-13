@@ -1,11 +1,14 @@
 import React, {useState, useContext} from 'react';
-import {View, Text, StyleSheet, Image, ActivityIndicator, SafeAreaView} from 'react-native'
+import {View, Text, StyleSheet, Image, ActivityIndicator, SafeAreaView, ScrollView, ActionSheetIOS, KeyboardAvoidingView} from 'react-native'
+import { Picker } from "@react-native-picker/picker";
+
 import * as ImagePicker from 'expo-image-picker';
 import {Button, Spinner, Input, NativeBaseProvider} from 'native-base';
-import { Formik } from 'formik';
+import { Formik, useFormikContext } from 'formik';
 import { CredintialsContext } from '../Components/CredintialContext';
 import MainButton from '../Components/Main_Button';
 import Secondary_Button from '../Components/Secondary_Button';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 
 
@@ -35,10 +38,56 @@ const createFormData = (photo) => {
 
     const [make, setMake] = useState('');
     const [model, setModel] = useState('')
-    const [isFocused, setIsFocused] = useState(false);
+    const [bodyType, setBodyType] = useState('')
 
+    const transmission = (setFieldValue) =>
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: ['Cancel', 'Automatic', 'Manual', 'Semi-Automatic'],
+        //destructiveButtonIndex: 0,
+        cancelButtonIndex: 0,
+      },
+      buttonIndex => {
+        if (buttonIndex === 0) {
+          // cancel action
+        } else if (buttonIndex === 1) {
+          setFieldValue('transmission', 'Automatic')
+        } else if (buttonIndex === 2) {
+          setFieldValue('transmission', 'Manual')
+        }
+        else if (buttonIndex === 3){
+          setFieldValue('transmission', 'Semi-Automatic')
+        }
+      }
+    );
 
-  
+    const fuel = (setFieldValue) =>
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: ['Cancel', 'Petrol', 'Diesel', 'Electric', 'Hybrid', 'Gas'],
+        //destructiveButtonIndex: 0,
+        cancelButtonIndex: 0,
+      },
+      buttonIndex => {
+        if (buttonIndex === 0) {
+          // cancel action
+        } else if (buttonIndex === 1) {
+          setFieldValue('fuelType', 'Petrol')
+        } else if (buttonIndex === 2) {
+          setFieldValue('fuelType', 'Diesel')
+        }
+        else if (buttonIndex === 3){
+          setFieldValue('fuelType', 'Electric')
+        }
+        else if(buttonIndex === 4){
+          setFieldValue('fuelType', 'Hybrid')
+        }
+        else if(buttonIndex === 5){
+          setFieldValue('fuelType', 'Gas')
+        }
+      }
+    );
+
 
       const handleUploadPhoto = (photo) => {
         fetch(`${SERVER_URL}`, {
@@ -47,9 +96,9 @@ const createFormData = (photo) => {
         })
           .then((response) => response.json())
           .then((response) => {
-            console.log(response.make)
             setMake(response.make)
             setModel(response.model)
+            setBodyType(response.bodyType)
             setLoading(false)
           })
           
@@ -84,12 +133,6 @@ const createFormData = (photo) => {
           console.log(e)
         }
       };
-
-      const details = () => {
-        console.log(make)
-        console.log(model)
-      }
-
       
 
     return(
@@ -103,31 +146,107 @@ const createFormData = (photo) => {
 
            </View>
            <View style={styles.infoContainer}>
-             <Input
-                defaultValue={make}
-                onChangeText={(value) => {setMake(value)}}
-                style={[styles.formElemnts, styles.input]}
-                variant="underlined"
-                onFocus={() => setIsFocused(true)}
+             <Formik enableReinitialize={true} //initialValues={vehi}
+                initialValues={{make: make,  model: model, bodyType: bodyType, milage: '', yearOfMake: '', fuelType: '', transmission: '', color: '', price: ''}}
+                onSubmit={(values, actions) => {
 
+                    console.log(values)
 
-             />
-             <Input
-                defaultValue={model}
-                style={styles.formElemnts}
-                variant="underlined"
+                }}
                 
+              >
+                {(props) => (
+                  <KeyboardAwareScrollView
+                  resetScrollToCoords={{ x: 0, y: 0 }}
+                  >           
+                     <Input
+                      name="make"
+                      onChangeText={props.handleChange('make')}
+                      value={props.values.make}
+                      placeholder="Make"
+                      style={styles.formElemnts}
+                     />
 
-             />
+                     <Input
+                      name="model"
+                      onChangeText={props.handleChange('model')}
+                      value={props.values.model}
+                      placeholder="Model"
+                      style={styles.formElemnts}
+                     />
 
+                     <Input
+                      name="bodyType"
+                      onChangeText={props.handleChange('bodyType')}
+                      value={props.values.bodyType}
+                      placeholder="Body Type"
+                      style={styles.formElemnts}  
+                      />
 
+                      <Input
+                      name="YOM"
+                      onChangeText={props.handleChange('yearOfMake')}
+                      value={props.values.yearOfMake}
+                      placeholder="Year of Make"
+                      style={styles.formElemnts}  
+                     
+                      //keyboardType="numeric"
+                      />
 
-            <MainButton text="Upload" />
+                     <Input
+                      name="milage"
+                      onChangeText={props.handleChange('milage')}
+                      value={props.values.milage}
+                      placeholder="Milage"
+                      style={styles.formElemnts}  
+                      keyboardType="numeric"
+                      />
+
+                      <Input
+                        name="transmission"
+                        onChangeText={props.handleChange('transmission')}
+                        value={props.values.transmission}
+                        placeholder="Transmission"
+                        style={styles.formElemnts}
+                        onTouchStart={() => transmission(props.setFieldValue)}
+                        editable={false}
+                      />
+
+                      <Input
+                      name="fuelType"
+                      onChangeText={props.handleChange('fuelType')}
+                      value={props.values.fuelType}
+                      placeholder="Fuel Type"
+                      style={styles.formElemnts}
+                      onTouchStart={() => fuel(props.setFieldValue)}
+                      editable={false}
+                      />
+
+                     <Input 
+                     name="color"
+                     onChangeText={props.handleChange('color')}
+                     value={props.values.color}
+                     placeholder="Color"
+                     style={styles.formElemnts}
+                    />
+
+                    <Input
+                    name="Price"
+                    onChangeText={props.handleChange('price')}
+                    value={props.values.price}
+                    placeholder="Price"
+                    style={styles.formElemnts}
+                    keyboardType="numeric"
+                    />
+                    
+                    <MainButton text="SUBMIT" onPress={props.handleSubmit} />
+                    </KeyboardAwareScrollView>         
+                  
+                )}
+              </Formik>
            </View>
-          
-          
 
-           {loading? (      <Spinner size="lg" style={styles.loading} color="#FF3535" />) : (<></>)}
+           {loading? ( <Spinner size="lg" style={styles.loading} color="#FF3535" />) : (<></>)}
        </SafeAreaView>
        </NativeBaseProvider>
     )
@@ -148,7 +267,7 @@ const styles = StyleSheet.create({
 
     infoContainer:{
         flex: 6,
-        padding: 10
+        padding: 20
     },
 
     image:{
@@ -181,7 +300,15 @@ const styles = StyleSheet.create({
   },
 
   formElemnts: {
-    marginBottom: 10
+    marginBottom: 20
+  },
+
+  picker: {
+    marginVertical: 30,
+    width: 300,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#666",
   },
 
   
