@@ -13,7 +13,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 
 
-export default function Add_Post(){
+export default function Add_Post({navigation}){
 
   const {storedCredintials, setStoredCredintials} = useContext(CredintialsContext);
   const {user_email} = storedCredintials
@@ -35,6 +35,7 @@ const createFormData = (photo) => {
     //const [photo, setPhoto] = useState(null)
     const [uri, setUri] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [photo, setPhoto] = useState(null)
 
     const [make, setMake] = useState('');
     const [model, setModel] = useState('')
@@ -100,10 +101,15 @@ const createFormData = (photo) => {
             setModel(response.model)
             setBodyType(response.bodyType)
             setLoading(false)
+
+            if(response.errors) {
+              console.log(response.errors) //invalid image type error
+            }
+
           })
           
           .catch((error) => {
-            console.log('error', error);
+            console.log(error)
           });
 
           setLoading(true)
@@ -122,8 +128,8 @@ const createFormData = (photo) => {
             quality: 1,
           });
       
-          console.log(result);
           setUri(result.uri)
+          setPhoto(result)
   
           handleUploadPhoto(result)
           
@@ -150,7 +156,13 @@ const createFormData = (photo) => {
                 initialValues={{make: make,  model: model, bodyType: bodyType, milage: '', yearOfMake: '', fuelType: '', transmission: '', color: '', price: ''}}
                 onSubmit={(values, actions) => {
 
-                    console.log(values)
+                    if(photo)
+                    {
+                      navigation.navigate('Contact', {detail: values, photo: photo})
+                    }
+                    else{
+                      console.log('error')
+                    }
 
                 }}
                 
@@ -189,8 +201,7 @@ const createFormData = (photo) => {
                       value={props.values.yearOfMake}
                       placeholder="Year of Make"
                       style={styles.formElemnts}  
-                     
-                      //keyboardType="numeric"
+                      keyboardType="numeric"
                       />
 
                      <Input
@@ -239,7 +250,7 @@ const createFormData = (photo) => {
                     keyboardType="numeric"
                     />
                     
-                    <MainButton text="SUBMIT" onPress={props.handleSubmit} />
+                    <MainButton text="Next" onPress={props.handleSubmit} />
                     </KeyboardAwareScrollView>         
                   
                 )}
