@@ -1,32 +1,57 @@
-import React, {useContext, useState} from 'react';
-import {View, Text, StyleSheet, SafeAreaView, StatusBar } from 'react-native'
+import React, {useContext, useEffect, useState} from 'react';
+import {View, Text, StyleSheet, SafeAreaView, StatusBar, FlatList } from 'react-native'
 import { CredintialsContext } from '../Components/CredintialContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MainButton from '../Components/Main_Button';
+import Card from '../Components/Card';
 
 import {Button, NativeBaseProvider} from 'native-base'
 
 export default function Home({route ,navigation}){
 
+    //const SERVER_URL = 'http://192.168.1.15:3000/upload/predict';
     StatusBar.setBarStyle('dark-content', true);
 
     const {storedCredintials, setStoredCredintials} = useContext(CredintialsContext)
     const {user_email} = storedCredintials
-    const [error, setError] = useState(false)
 
-    const test = () => {
-        setError(true)
-    }
+    const [post, setPosts] = useState()
+    const [refresh, setReFresh] = useState(false)
+
     
+    useEffect(() => {
+        fetch('http://192.168.1.15:3000/upload')
+          .then((response) => response.json())
+          .then((response) => {
+              setPosts(response.posts)
+              console.log(post)
+              setReFresh(false)
+          })
+         .catch((error) => console.error(error))
+          //.finally(() => setLoading(false));
+      },[refresh]);
 
     return(
         <NativeBaseProvider>       
-            <View>
-                {error? <Text>Hello</Text> : <></>}
-                <Text> Welcome {user_email} </Text>
-                <MainButton text="Click" onPress={test}/>
-
+            <View style={styles.container}>
+                <FlatList
+                    data={post}
+                    keyExtractor={(item) => item._id}
+                    refreshing={refresh}
+                    onRefresh={() => {setReFresh(true)}}
+                    renderItem={({item}) => (
+                        <Card model={item.model} postedBy={item.postedBy} image={item.image}/>
+                    )}
+                />
             </View>
         </NativeBaseProvider>
     )
 }
+
+const styles = StyleSheet.create({
+    container:
+    {
+        flex: 1,
+        
+    }
+})
