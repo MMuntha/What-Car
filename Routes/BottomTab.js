@@ -34,7 +34,9 @@ export default function BottomTab(){
             
           />
 
-          <Tab.Screen name="Search" component={Search}
+          <Tab.Screen name="Search" 
+          component={Search}
+
             options={{
                 tabBarIcon: ({focused}) => (
                   focused ?<Ionicons name="search" size={24} color="red" />: <Ionicons name="search" size={24} color="gray" /> 

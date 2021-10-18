@@ -4,12 +4,11 @@ import { CredintialsContext } from '../Components/CredintialContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MainButton from '../Components/Main_Button';
 import Card from '../Components/Card';
-
 import {Button, NativeBaseProvider} from 'native-base'
 
 export default function Home({route ,navigation}){
 
-    //const SERVER_URL = 'http://192.168.1.15:3000/upload/predict';
+
     StatusBar.setBarStyle('dark-content', true);
 
     const {storedCredintials, setStoredCredintials} = useContext(CredintialsContext)
@@ -40,7 +39,7 @@ export default function Home({route ,navigation}){
                     refreshing={refresh}
                     onRefresh={() => {setReFresh(true)}}
                     renderItem={({item}) => (
-                        <Card model={item.model} postedBy={item.postedBy} image={item.image}/>
+                        <Card model={item.model} postedBy={item.postedBy} image={item.image} onPress={() => {navigation.navigate('Details', {id: item._id})}}/>
                     )}
                 />
             </View>

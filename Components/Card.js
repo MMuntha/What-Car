@@ -27,7 +27,7 @@ export default function Card(props){
                 <Text style={styles.price}>Rs 10,950,000.00</Text>
             </View>
             <View style={styles.btnContainer}>
-                <MainButton text="More Details" style={styles.mainButton}/>
+                <MainButton text="More Details" onPress={props.onPress} style={styles.mainButton}/>
             </View>
         </View>
     )
