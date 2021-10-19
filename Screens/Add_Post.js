@@ -266,6 +266,7 @@ const createFormData = (photo) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: 'white'
         
     },
     imageContainer: {

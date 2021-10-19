@@ -9,7 +9,7 @@ import { CredintialsContext } from '../Components/CredintialContext';
 export default function Upload({route}){
 
     const {storedCredintials, setStoredCredintials} = useContext(CredintialsContext)
-    const {user_username, user_phone_no, user_email} = storedCredintials
+    const {user_username, user_phone_no, user_email, _id} = storedCredintials
 
     const SERVER_URL = 'http://192.168.1.15:3000/upload/addPost'
 
@@ -21,7 +21,7 @@ export default function Upload({route}){
         <NativeBaseProvider>
         <View style={styles.container}>
             <Formik
-                initialValues = {{name: user_username, contact: user_phone_no.toString() , city: ''}}
+                initialValues = {{name: user_username, contact: user_phone_no.toString() , city: '', userId: _id }}
 
                 onSubmit={(values, actions) => {
                     
@@ -42,7 +42,8 @@ export default function Upload({route}){
                       data.append('price',  detail.price)
                       data.append('postedBy', values.name)
                       data.append('contact', parseInt(values.contact))
-                      data.append('location', values.city)
+                      data.append('location', values.city),
+                      data.append('userId', values.userId)
 
                       fetch(`${SERVER_URL}`, {
                           method : 'POST',

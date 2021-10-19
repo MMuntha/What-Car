@@ -4,7 +4,6 @@ import { padding, paddingBottom, paddingTop } from 'styled-system';
 import MainButton from './Main_Button';
 
 export default function Card(props){
-    let Image_Http_URL ={ uri: '192.168.1.15:3000/uploads/1634484045122-34145585-FA326444-4866-4945-81AA-949431ED808D.png'};
 
     return(
         <View style={styles.card}>
