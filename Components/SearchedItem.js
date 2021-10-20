@@ -3,7 +3,7 @@ import {Text, View, TouchableOpacity, Image, StyleSheet} from 'react-native'
 
 export default function SearchedItem(props){
     return(
-       <TouchableOpacity style={styles.container}>
+       <TouchableOpacity style={styles.container} onPress={props.onPress}>
             <Image
                 source={require('../public/pro-pic.jpg')}
                 style={styles.proPic}
