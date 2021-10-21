@@ -47,7 +47,7 @@ export default function Search({route, navigation}){
                         keyExtractor={(item) => item._id}
                         renderItem={({item}) => (
                             //<Text>{item.user_username}</Text>
-                            <SearchedItem name={item.user_username} onPress={() => {navigation.navigate('SearchedProfile', { name: item.user_username, searchedId: item._id})}}/>
+                            <SearchedItem name={item.user_username} image={item.pro_image} onPress={() => {navigation.navigate('SearchedProfile', { name: item.user_username, searchedId: item._id})}}/>
 
                         )}
                     />

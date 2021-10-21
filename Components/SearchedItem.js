@@ -5,7 +5,7 @@ export default function SearchedItem(props){
     return(
        <TouchableOpacity style={styles.container} onPress={props.onPress}>
             <Image
-                source={require('../public/pro-pic.jpg')}
+                source={{ uri: 'http://192.168.1.15:3000/uploads/Profile-Pics/' +`${props.image}`  }}
                 style={styles.proPic}
             />
              <Text style={styles.nameText}>{props.name}</Text>

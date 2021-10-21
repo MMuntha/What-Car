@@ -7,6 +7,8 @@ import {Button, NativeBaseProvider} from 'native-base'
 
 export default function Profile({route ,navigation}){
 
+
+
     StatusBar.setBarStyle('dark-content', true);
 
     const {storedCredintials, setStoredCredintials} = useContext(CredintialsContext)
@@ -27,7 +29,7 @@ export default function Profile({route ,navigation}){
     return(
         <NativeBaseProvider>
             <View>
-
+                <Text>{user_email}</Text>
                 <Button onPress={logout}>Logout</Button>
             </View>
         </NativeBaseProvider>

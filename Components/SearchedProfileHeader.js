@@ -7,7 +7,7 @@ export default function SearchedProfileHeader (props) {
         <View style={styles.container}>
            <View style={styles.imageContainer}>
             <Image 
-                        source={require('../public/pro-pic.jpg')}
+                        source={{ uri: 'http://192.168.1.15:3000/uploads/Profile-Pics/' +`${props.proImage}`  }}
                         style={styles.proPic}
                 />
            </View>

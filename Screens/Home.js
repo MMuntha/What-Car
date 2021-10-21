@@ -39,7 +39,7 @@ export default function Home({route ,navigation}){
                     refreshing={refresh}
                     onRefresh={() => {setReFresh(true)}}
                     renderItem={({item}) => (
-                        <Card model={item.model} postedBy={item.postedBy} image={item.image} onPress={() => {navigation.navigate('Details', {id: item._id})}}/>
+                        <Card model={item.model} postedBy={item.postedBy} image={item.image}  onPress={() => {navigation.navigate('Details', {id: item._id})}}/>
                     )}
                 />
             </View>

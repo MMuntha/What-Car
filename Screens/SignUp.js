@@ -1,7 +1,8 @@
 import React, {useState, useContext} from "react";
-import {View, StyleSheet, Text, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, ScrollView} from 'react-native'
+import {View, StyleSheet, Text, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Image, Button, ActivityIndicator} from 'react-native'
+import * as ImagePicker from 'expo-image-picker';
 import { Formik } from "formik";
-import { Input, Button, Image, Link, FormControl, NativeBaseProvider} from 'native-base';
+import { Input, Link, FormControl, NativeBaseProvider} from 'native-base';
 import { marginTop } from "styled-system";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CredintialsContext } from "../Components/CredintialContext";
@@ -12,7 +13,10 @@ export default function SignUp({navigation}){
     const [error_email, set_error_email] = useState('')
     const [erro_password, set_error_password] = useState('')
     const [error_phone_no, set_error_phone_no] = useState('')
+    const [photo, setPhoto] = useState(null)
+    const[uri, setUri] = useState('')
 
+    const data = new FormData();
 
     const {storedCredintials,setStoredCredintials} = useContext(CredintialsContext)
 
@@ -30,6 +34,29 @@ export default function SignUp({navigation}){
 
     }
 
+    const pickImage = async () => {
+        try{
+
+          let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+          });
+      
+          setUri(result.uri)
+          setPhoto(result)
+          
+        //  handleUploadPhoto(result)
+          
+
+        }
+        catch(e){
+          console.log(e)
+        }
+       
+      };
+
 
     return(
         <NativeBaseProvider>
@@ -39,24 +66,37 @@ export default function SignUp({navigation}){
 
         >
             <View style={styles.bannerContainer}>
+                {uri?
+                
+                    <Image source={{uri: uri}}
+                    style={styles.proPic}
+                      />
+                      
+                      :
+                    <></>
+                }
             </View>
             <Formik
                 initialValues={{user_username: '', user_email: '', user_password: '', user_phone_no: ''}}
                 onSubmit={(values) => {
 
+                    data.append('image', {
+                        name: photo.uri,
+                        type: photo.type,
+                        uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
+                       // uri: photo.uri.replace('file://', '')
+                      });
+
+                      data.append('user_username', values.user_username)
+                      data.append('user_email', values.user_email)
+                      data.append('user_password', values.user_password)
+                      data.append('user_phone_no', values.user_phone_no)
+
+
                       fetch('http://192.168.1.15:3000/userAuth/userSignUp', {
                       method: 'POST',
-                      headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json'
-                      },
-                      body: JSON.stringify({
-                        user_username: values.user_username,
-                        user_email: values.user_email,
-                        user_password: values.user_password,
-                        user_phone_no: values.user_phone_no
-
-                      })
+                      body: data
+                      
                     }).then((response) => response.json())
                       .then((json) => {
                         if(json.customer){
@@ -106,7 +146,7 @@ export default function SignUp({navigation}){
                       value={props.values.user_phone_no}
                       />
                     
-                      {/* <Button style={styles.formElements} onPress={props.handleSubmit}>Sign up</Button> */}
+                    <Button title="Choose Photo"  onPress={pickImage}/>
                       <MainButton text="SIGN UP" style={styles.formElements} onPress={props.handleSubmit}/>
 
 
@@ -128,6 +168,8 @@ const styles = StyleSheet.create({
         flex: 2,
         padding:30,
         backgroundColor: '#FF3535',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 
     formContainer:{
@@ -149,5 +191,10 @@ const styles = StyleSheet.create({
     },
     errorMessage:{
         color: 'red'
+    },
+    proPic: {
+        width:100,
+        height: 100,
+        borderRadius: 50
     }
 })      

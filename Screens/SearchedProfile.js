@@ -53,41 +53,39 @@ export default function SearchedProfile({ route, navigation}){
        
     }
 
-const addComment = () => {
+    const addComment = () => {
 
-    const commentOnId = searchedId;
-    const commentedBy = user_username;
-    const commentedById = _id;
-    const comment = newComment;
+        const commentOnId = searchedId;
+        const commentedBy = user_username;
+        const commentedById = _id;
+        const comment = newComment;
 
-    
-    fetch('http://192.168.1.15:3000/general/addComment', {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            commentedOnId : commentOnId,
-            commentedBy : commentedBy,
-            commentedById : commentedById,
-            comment: comment
-        })
-    })
-    .then((response) => response.json())
-    .then((response) => {
-       
-        console.log(response.result)
         
-    })
-    .catch((error) => {
-        console.log(error)
-    })
+        fetch('http://192.168.1.15:3000/general/addComment', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                commentedOnId : commentOnId,
+                commentedBy : commentedBy,
+                commentedById : commentedById,
+                comment: comment
+            })
+        })
+        .then((response) => response.json())
+        .then((response) => {
+        
+            console.log(response.result)
+            
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+        
 
-
-    
-
-}
+    }
 
 
     
@@ -121,7 +119,9 @@ const addComment = () => {
         .catch((error) => {
             console.log(error)
         })
-        .finally(() => setLoading(false))
+        .finally(() => {
+            setLoading(false)
+        })
 
         vehiDetails()
 
@@ -163,7 +163,7 @@ const addComment = () => {
                 </Modal>
     
                <View style={styles.headerContainer}>
-                   <SearchedProfileHeader onPress={() => setShowModal(true)} postCount={userDetails.no_of_posts} />
+                   <SearchedProfileHeader onPress={() => setShowModal(true)} postCount={userDetails.no_of_posts} proImage={userDetails.pro_image}/>
                </View>
                <View style={{flex: 2, }} >
                 
